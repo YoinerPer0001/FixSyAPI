@@ -1,4 +1,5 @@
 import { body, param, validationResult } from "express-validator";
+import roles_service from "../services/roles_service.js";
 
 export const loginValidator = [
     body('email')
@@ -7,6 +8,16 @@ export const loginValidator = [
     body('password')
     .notEmpty().withMessage("This value cannot be empty")
     .isLength({min: 8, max: 50}).withMessage("Value out of range"),
+    body('type')
+    .notEmpty().withMessage("This value cannot be empty")
+    .isString().withMessage("The value must be string")
+    .custom(async value =>{
+        
+        const rol_id = await roles_service.getIdRolxName(value);
+        if(!rol_id){
+            throw new Error("Type value is invalid");
+        }
+    }).withMessage("Type value is invalid"),
     
     (req, res, next)=>{
         const errors = validationResult(req);
@@ -43,6 +54,17 @@ export const UserDataValidator = [
     body('address')
     .notEmpty().withMessage("This value cannot be empty")
     .isString().withMessage("The value must be string"),
+
+    body('type')
+    .notEmpty().withMessage("This value cannot be empty")
+    .isString().withMessage("The value must be string")
+    .custom(async value =>{
+        
+        const rol_id = await roles_service.getIdRolxName(value);
+        if(!rol_id){
+            throw new Error("Type value is invalid");
+        }
+    }).withMessage("Type value is invalid"),
 
     (req, res, next)=>{
         const errors = validationResult(req);

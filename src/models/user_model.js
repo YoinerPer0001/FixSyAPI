@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import db from '../config/db.js'
+import Roles from "./roles_model.js";
 
 class Users extends Model {}
 
@@ -28,7 +29,14 @@ Users.init({
     address:{
         type: DataTypes.TEXT,
     },
+
+    id_rol :{
+        type: DataTypes.UUID
+    }
   
 }, {sequelize: db, modelName : 'users', timestamps: true})
+
+Roles.hasMany(Users,{foreignKey: "id_rol"})
+Users.belongsTo(Roles,{foreignKey: "id_rol", as : 'rol' })
 
 export default Users;

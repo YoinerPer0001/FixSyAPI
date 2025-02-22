@@ -1,3 +1,4 @@
+import roles_service from "../services/roles_service.js";
 import user_services from "../services/user_services.js";
 
 class UserController {
@@ -13,9 +14,11 @@ class UserController {
 
   async login(req, res) {
     try {
-      const { email, password } = req.body;
+      req.body.type = await roles_service.getIdRolxName(req.body.type)
 
-      const response = await user_services.login(email, password);
+      const { email, password, type } = req.body;
+
+      const response = await user_services.login(email, password, type);
 
       if (!response) {
         res.status(404).json({ error: "User o password incorrect" });
@@ -28,7 +31,9 @@ class UserController {
   }
 
   async register(req, res) {
+    req.body.type = await roles_service.getIdRolxName(req.body.type)
     const user = req.body;
+    
     try {
       const registered = await user_services.register(user);
       res.status(200).json(registered);

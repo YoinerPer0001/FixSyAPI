@@ -2,6 +2,7 @@
 
 import UserRepository from "../repository/user_repository.js";
 import { hashPassword, comparePassword } from "../utils/PasswordsManager.js";
+import roles_service from "./roles_service.js";
 
 class UserService {
   async getById(id) {
@@ -21,10 +22,11 @@ class UserService {
   }
 
   async register(user) {
+
     // user verification
     const registered = await UserRepository.getuserRegistered(
       user.id_number,
-      user.email
+      user.type
     );
     
     if (registered) {
@@ -33,21 +35,25 @@ class UserService {
     const encPass = await hashPassword(user.password);
 
     const newUser = {
-      name: user.name,
-      email: user.email,
+      name: user.name.toLowerCase(),
+      email: user.email.toLowerCase(),
       id_number: user.id_number,
       phone: user.phone,
       password: encPass,
       address: user.address,
+      id_rol: user.type
     };
-    const response = UserRepository.create(newUser);
+
+    const response = await UserRepository.create(newUser);
     return response;
   }
 
-  async login(email, password) {
-    const dataUser = await UserRepository.login(email);
+  async login(email, password, rol) {
+    const dataUser = await UserRepository.login(email, rol);
     if (!dataUser) {
+      throw new Error("User or password incorrect");
     }
+    
     //pass encript
     const isMatch = await comparePassword(
       dataUser.dataValues.password,
@@ -56,6 +62,7 @@ class UserService {
 
     if (isMatch) {
       const objUser = {
+        id: dataUser.id,
         id_number: dataUser.dataValues.id_number,
         name: dataUser.dataValues.name,
         email: dataUser.dataValues.email,
@@ -63,6 +70,7 @@ class UserService {
         address: dataUser.dataValues.adress,
       };
       return objUser;
+
     } else {
       throw new Error("User or password incorrect");
     }

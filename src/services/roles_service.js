@@ -13,6 +13,17 @@ class RolesService {
         }
         return response;
     }
+
+    async getIdRolxid(id){
+
+        const response = await roles_repository.getRolexID(id)
+
+        if(!response){
+            throw new Error("Error: Rol not valid");
+            
+        }
+        return response;
+    }
 }
 
 export default new RolesService();

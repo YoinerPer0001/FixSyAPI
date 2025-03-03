@@ -49,11 +49,17 @@ export const UserDataValidator = [
 
     body('password')
     .notEmpty().withMessage("This value cannot be empty")
-    .isString().withMessage("The value must be string"),
+    .isLength({min: 8, max: 50}).withMessage("Value out of range"),
 
     body('address')
     .notEmpty().withMessage("This value cannot be empty")
     .isString().withMessage("The value must be string"),
+
+    body('id_num_type')
+    .notEmpty().withMessage("This value cannot be empty")
+    .isString().withMessage("The value must be string")
+    .isLength({max:2}).withMessage("Value must be 2 characters 'CC', 'TI', 'CE'")
+    .isUppercase().withMessage("Value must be uppercase"),
 
     body('type')
     .notEmpty().withMessage("This value cannot be empty")
@@ -72,7 +78,6 @@ export const UserDataValidator = [
         if(!errors.isEmpty()){
             return res.status(500).json({errors:errors.array()})
         }
-
         next();
     }
 

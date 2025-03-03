@@ -1,8 +1,9 @@
 import Roles from "../models/roles_model.js";
+import Technicians from "../models/technicians_model.js";
 import Users from "../models/user_model.js";
 import { Op } from "sequelize";
 
-const userAtributes = ['id_number', 'name', 'email', 'phone', 'address' ]
+const userAtributes = ['id_number', 'name', 'email', 'phone', 'address', 'id_num_type' ]
 const rolesAtributes = ['id', 'name']
 
 class UserRepository {
@@ -37,7 +38,7 @@ class UserRepository {
 
     async login(email, rol){
         try {
-            return Users.findOne({where: {[Op.and]: [{email: email}, {id_rol: rol}]}})
+            return Users.findOne({where: {[Op.and]: [{email: email}, {id_rol: rol}]}, include: {model: Technicians, as: "techInfo"}})
         } catch (error) {
             throw new Error("Error to login: ", error);
         }

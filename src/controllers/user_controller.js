@@ -14,11 +14,10 @@ class UserController {
 
   async login(req, res) {
     try {
-      req.body.type = await roles_service.getIdRolxName(req.body.type)
-
+     
       const { email, password, type } = req.body;
 
-      const response = await user_services.login(email, password, type);
+      const response = await user_services.login(email.toLowerCase(), password, type);
 
       if (!response) {
         res.status(404).json({ error: "User o password incorrect" });
@@ -35,8 +34,8 @@ class UserController {
     const user = req.body;
     
     try {
-      const registered = await user_services.register(user);
-      res.status(200).json(registered);
+      const {code, message} = await user_services.register(user);
+      res.status(code).json(message);
 
     } catch (error) {
       res.status(500).json({ error: error.message });

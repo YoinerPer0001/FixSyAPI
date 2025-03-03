@@ -13,25 +13,40 @@ Users.init({
     },
     id_number:{
         type: DataTypes.BIGINT,
+        allowNull: false,
     },
     name:{
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     email:{
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     phone:{
         type: DataTypes.STRING(20),
+        allowNull: false,
     },
     password:{
         type: DataTypes.TEXT,
+        allowNull: false,
     },
     address:{
         type: DataTypes.TEXT,
+        allowNull: false,
     },
 
     id_rol :{
-        type: DataTypes.UUID
+        type: DataTypes.UUID,
+        allowNull: false,
+    },
+    id_num_type: {
+        type : DataTypes.ENUM("TI", "CC", "CE"),
+        allowNull: false,
+    },
+    perfil_photo:{
+        type: DataTypes.TEXT,
+        allowNull: true
     }
   
 }, {sequelize: db, modelName : 'users', timestamps: true})

@@ -6,7 +6,7 @@ class TechController {
       const { id } = req.params;
       const updated = await technicians_service.update(id, req.body);
 
-      res.status(200).json(updated);
+      res.status(updated.code).json(updated.data);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

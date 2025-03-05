@@ -41,6 +41,21 @@ class UserController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  async update(req,res){
+    try {
+
+      const {id} = req.params
+      const newData = req.body
+
+      const response = await user_services.update(id, newData)
+
+      return res.status(response.code).json(response.message)
+      
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 export default new UserController();

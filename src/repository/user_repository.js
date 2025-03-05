@@ -58,8 +58,8 @@ class UserRepository {
     async update(id, newData){
         
         try {
-            const user = await Users.findOne({where: {id_number: id}})
-            await user.update(newData);
+            
+            const user = await Users.update(newData, {where: {id:id}});
             return user;
 
         } catch (error) {

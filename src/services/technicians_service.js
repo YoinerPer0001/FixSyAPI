@@ -16,7 +16,7 @@ class Technicians_service {
         return {code: 201, data: register}
     }
 
-    async getIdTechxid(id){
+    async getIdTechxid(id){ //return tech info by tech id
 
         const response = await TechniciansRepository.getById(id)
 
@@ -32,12 +32,12 @@ class Technicians_service {
         const registred = await this.getIdTechxid(id)
         
         if(!registred){
-            return {code: 500, message: "Tech is not registered"}
+            return {code: 404, message: "Tech is not registered"}
         }
-        console.log(newData)
+
         const response = await TechniciansRepository.update(id, newData)
 
-        return {code: 201, data: response}
+        return {code: 200, data: response}
     }
 }
 

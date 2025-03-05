@@ -83,6 +83,9 @@ class UserService {
       if (isMatch) {
         let objUser = {
           id: dataUser.id,
+          id_tech: dataUser.dataValues.techInfo
+            ? dataUser.dataValues.techInfo.id
+            : null,
           id_number: dataUser.dataValues.id_number,
           name: dataUser.dataValues.name,
           email: dataUser.dataValues.email,
@@ -113,8 +116,18 @@ class UserService {
   }
 
   async update(id, newdata) {
-    const updated = UserRepository.update(id, newdata);
-    return updated;
+
+    const registered = this.getById(id)
+
+    if (!registered) {
+      return { code: 404, message: "Tech is not registered" };
+    }
+    const updated =  await UserRepository.update(id, newdata);
+
+    if(!updated){
+      return { code: 500, message: "Error to update" };
+    }
+    return { code: 200, message: updated };
   }
 }
 
